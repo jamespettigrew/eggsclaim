@@ -4,7 +4,7 @@ import serial
 import sms
 from xbee import XBee
 
-SERIAL_PORT = '/dev/usbserial-143'
+SERIAL_PORT = '/dev/tty.usbserial-143'
 MOBILE_NUM = '0400000000'
 NOTIFICATION_MSG = 'Cock-a-doodle-doo! An egg is waiting for you!'
 

@@ -1,14 +1,14 @@
 import requests
 
-def send_sms(to, message_content):
+def send(to, message_content):
     payload = { 
-        "to" : to,
-        "body" : message_content,
-        "from" : "",
-        "validity" : 0,
-        "scheduleDelivery" : 0,
-        "notifyURL" : "",
-        "replyRequest" : True
+        'to' : to,
+        'body' : message_content,
+        'from' : '',
+        'validity' : 0,
+        'scheduleDelivery' : 0,
+        'notifyURL' : '',
+        'replyRequest' : True
     }
 
     auth = ('', '')

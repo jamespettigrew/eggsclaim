@@ -13,7 +13,7 @@ egg_was_present = False
 def packet_received(packet):
     global egg_was_present
     samples = packet['samples'][0]
-    egg_is_present = samples['dio-1'] if 'dio-1' in samples else False
+    egg_is_present = not samples['dio-1'] if 'dio-1' in samples else False
 
     if egg_is_present and egg_is_present != egg_was_present:
         sms.send(MOBILE_NUM, NOTIFICATION_MSG)

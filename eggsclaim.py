@@ -2,7 +2,7 @@ import signal
 import sys
 import serial
 import sms
-from xbee import XBee
+from xbee import ZigBee
 
 SERIAL_PORT = '/dev/tty.usbserial-143'
 MOBILE_NUM = '0400000000'
@@ -10,12 +10,8 @@ NOTIFICATION_MSG = 'Cock-a-doodle-doo! An egg is waiting for you!'
 
 egg_was_present = False
 
-def signal_handler(signal, frame):
-    xbee.halt()
-    serial_port.close()
-    sys.exit(0)
-
 def packet_received(packet):
+    global egg_was_present
     samples = packet['samples'][0]
     egg_is_present = samples['dio-1'] if 'dio-1' in samples else False
 
@@ -23,7 +19,17 @@ def packet_received(packet):
         sms.send(MOBILE_NUM, NOTIFICATION_MSG)
     egg_was_present = egg_is_present
 
-signal.signal(signal.SIGINT, signal_handler)
-
 serial_port = serial.Serial(SERIAL_PORT, 9600)
-xbee = XBee(serial_port, callback=packet_received)
+xbee = ZigBee(serial_port, escaped=True)
+
+while True:
+    try:
+        packet = xbee.wait_read_frame()
+        packet_received(packet)
+    except serial.serialutil.SerialException:
+        pass
+    except KeyboardInterrupt:
+        break
+
+xbee.halt()
+serial_port.close()

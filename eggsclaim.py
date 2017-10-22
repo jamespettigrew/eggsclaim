@@ -13,7 +13,7 @@ def signal_handler(signal, frame):
 
 def packet_received(packet):
     samples = packet['samples'][0]
-    egg_is_present = True if 'dio-4' in samples else False
+    egg_is_present = samples['dio-4'] if 'dio-4' in samples else False
 
     if egg_is_present and egg_is_present != egg_was_present:
         sms.send_sms("", "Cock-a-doodle-doo! An egg is waiting for you!")

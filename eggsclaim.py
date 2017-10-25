@@ -1,14 +1,23 @@
-import signal
-import sys
 import serial
-import sms
+from datetime import datetime
+from pyfcm import FCMNotification
 from xbee import ZigBee
 
+API_KEY = ''
 SERIAL_PORT = '/dev/tty.usbserial-143'
-MOBILE_NUM = '0400000000'
-NOTIFICATION_MSG = 'Cock-a-doodle-doo! An egg is waiting for you!'
 
 egg_was_present = False
+push_service = FCMNotification(api_key=API_KEY)
+
+def send_notification(egg_present):
+    payload = {
+        'timestamp' : datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'),
+        'egg_present' : egg_present
+    }
+    extra_kwargs = {
+    'priority': 'high'
+    }
+    result = push_service.notify_topic_subscribers(topic_name="updates", data_message=payload, extra_kwargs=extra_kwargs)
 
 def packet_received(packet):
     global egg_was_present
@@ -18,10 +27,10 @@ def packet_received(packet):
 
     if egg_is_present != egg_was_present:
         if egg_is_present:
-            print('Egg(s) waiting, sending SMS notification!')
-            #sms.send(MOBILE_NUM, NOTIFICATION_MSG) # Uncomment when SMS API is functional
+            print('Egg(s) waiting, sending notification!')
         else:
-            print('Egg(s) collected!')
+            print('Egg(s) collected, sending notification!')
+        send_notification(egg_is_present)
     egg_was_present = egg_is_present
 
 serial_port = serial.Serial(SERIAL_PORT, 9600)

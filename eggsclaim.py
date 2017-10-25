@@ -11,7 +11,7 @@ push_service = FCMNotification(api_key=API_KEY)
 
 def send_notification(egg_present):
     payload = {
-        'timestamp' : datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'),
+        'timestamp' : datetime.utcnow().strftime('%Y-%m-%d %H:%M'),
         'egg_present' : egg_present
     }
     extra_kwargs = {

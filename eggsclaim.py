@@ -9,15 +9,19 @@ SERIAL_PORT = '/dev/tty.usbserial-143'
 egg_was_present = False
 push_service = FCMNotification(api_key=API_KEY)
 
+
 def send_notification(egg_present):
     payload = {
-        'timestamp' : datetime.utcnow().strftime('%H:%M %d-%m-%Y'),
-        'egg_present' : egg_present
+        'timestamp': datetime.utcnow().strftime('%H:%M %d-%m-%Y'),
+        'egg_present': egg_present
     }
     extra_kwargs = {
-    'priority': 'high'
+        'priority': 'high'
     }
-    result = push_service.notify_topic_subscribers(topic_name="updates", data_message=payload, extra_kwargs=extra_kwargs)
+    result = push_service.notify_topic_subscribers(topic_name="updates",
+                                                   data_message=payload,
+                                                   extra_kwargs=extra_kwargs)
+
 
 def packet_received(packet):
     global egg_was_present

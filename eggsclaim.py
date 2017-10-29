@@ -31,7 +31,7 @@ def packet_received(packet):
         else:
             print('Egg(s) collected, sending notification!')
         send_notification(egg_is_present)
-    egg_was_present = egg_is_present
+        egg_was_present = egg_is_present
 
 serial_port = serial.Serial(SERIAL_PORT, 9600)
 xbee = ZigBee(serial_port, escaped=True)
